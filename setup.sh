@@ -58,7 +58,7 @@ FIX_SCRIPT="$SCRIPT_DIR/fix_stuck_wai.sh"
 if [ -f "$FIX_SCRIPT" ]; then
     # Check if already running, delete and restart if needed
     pm2 delete fix_stuck_wai 2>/dev/null || true
-    pm2 start "$FIX_SCRIPT" --interpreter bash --name fix_stuck_wai
+    pm2 start "$FIX_SCRIPT" --interpreter bash --name fix_wai
     echo "fix_stuck_wai.sh started with PM2"
 else
     echo "Warning: fix_stuck_wai.sh not found at $FIX_SCRIPT"
