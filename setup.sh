@@ -49,19 +49,19 @@ echo ""
 echo "Step 5: Setting up PM2 startup script..."
 pm2 startup systemd -u $USER --hp $HOME || echo "PM2 startup already configured or requires manual setup"
 
-# Start fix_stuck_wai.sh with PM2
+# Start fix_wai.sh with PM2
 echo ""
-echo "Step 6: Starting fix_stuck_wai.sh monitor with PM2..."
+echo "Step 6: Starting fix_wai.sh monitor with PM2..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FIX_SCRIPT="$SCRIPT_DIR/fix_stuck_wai.sh"
+FIX_SCRIPT="$SCRIPT_DIR/fix_wai.sh"
 
 if [ -f "$FIX_SCRIPT" ]; then
     # Check if already running, delete and restart if needed
     pm2 delete fix_stuck_wai 2>/dev/null || true
     pm2 start "$FIX_SCRIPT" --interpreter bash --name fix_wai
-    echo "fix_stuck_wai.sh started with PM2"
+    echo "fix_wai.sh started with PM2"
 else
-    echo "Warning: fix_stuck_wai.sh not found at $FIX_SCRIPT"
+    echo "Warning: fix_wai.sh not found at $FIX_SCRIPT"
 fi
 
 # Install wai CLI tool
