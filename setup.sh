@@ -64,9 +64,20 @@ else
     echo "Warning: fix_wai.sh not found at $FIX_SCRIPT"
 fi
 
+# Install jq (needed by some CLI installers)
+echo ""
+echo "Step 7: Installing jq if missing..."
+if ! command -v jq &> /dev/null; then
+    apt install -y jq
+    echo "jq installed successfully"
+    jq --version
+else
+    echo "jq is already installed: $(jq --version)"
+fi
+
 # Install wai CLI tool
 echo ""
-echo "Step 7: Installing wai CLI tool..."
+echo "Step 8: Installing wai CLI tool..."
 if ! command -v wai &> /dev/null; then
     curl -fsSL https://app.w.ai/install.sh | bash
     echo "wai CLI tool installed successfully"
@@ -83,6 +94,7 @@ echo "Installed versions:"
 echo "  Node.js: $(node --version)"
 echo "  npm: $(npm --version)"
 echo "  PM2: $(pm2 --version)"
+echo "  jq: $(jq --version)"
 echo ""
 echo "You can now use PM2 to manage your W.AI instances"
 echo "Run: pm2 start ecosystem.config.js" --only wai-1
