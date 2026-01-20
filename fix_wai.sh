@@ -6,7 +6,7 @@ CHECK_INTERVAL=60           # How often to check (seconds) - reduced for faster 
 RESTART_COOLDOWN=120        # Wait time after restart before next check
 HEALTH_REPORT_INTERVAL=300  # How often to print health message (seconds)
 INSTANCE_NAME="wai-1"       # The PM2 instance name to monitor
-DESIRED_MODEL_PATTERNS="flux|mistral"  # Desired model keywords (case-insensitive, pipe-separated)
+DESIRED_MODEL_PATTERNS="flux|mistral|gemma|sdxl"  # Desired model keywords (case-insensitive, pipe-separated)
 MAX_MODEL_RESTARTS=3        # Max restarts before entering fallback mode
 FALLBACK_DURATION=1800      # 30 minutes in fallback mode before retrying desired model
 
