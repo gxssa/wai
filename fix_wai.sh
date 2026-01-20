@@ -79,7 +79,7 @@ check_loaded_model() {
     
     if [ -z "$model_name" ]; then
         # Couldn't parse model name, try alternate format
-        model_name=$(echo "$loaded_line" | grep -oiE "(flux|mistral)[^ ]*")
+        model_name=$(echo "$loaded_line" | grep -oiE "(flux|mistral|gemma|sdxl)[^ ]*")
     fi
     
     if [ -n "$model_name" ]; then
@@ -214,7 +214,7 @@ while true; do
             fallback_mode=0
             fallback_announced=0
             wrong_model_restart_count=0
-            force_restart_instance "Exiting fallback mode - trying for flux/mistral again"
+            force_restart_instance "Exiting fallback mode - trying for flux/mistral/gemma/sdxl again"
             continue
         fi
     fi
@@ -251,7 +251,7 @@ while true; do
             else
                 # Normal behavior - restart for desired model
                 echo "$(date): ❌ Wrong model detected: '$loaded_model' (want: $DESIRED_MODEL_PATTERNS)"
-                force_restart_instance "Wrong model '$loaded_model' - restarting for flux/mistral (attempt #$((wrong_model_restart_count + 1)))"
+                force_restart_instance "Wrong model '$loaded_model' - restarting for flux/mistral/gemma/sdxl (attempt #$((wrong_model_restart_count + 1)))"
                 correct_model_announced=0
                 current_loaded_model=""
                 continue
