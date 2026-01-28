@@ -1,11 +1,36 @@
 #!/bin/bash
 
+# ============================================================================
+# MACHINE ID CONFIGURATION
+# ============================================================================
+# Machine ID identifies this cloud machine
+# Can be set via:
+#   1. Command line: ./fix_wai.sh wai-2
+#   2. Environment variable: MACHINE_ID=wai-2 ./fix_wai.sh
+#   3. Fallback: auto-detect from hostname or default to wai-1
+
+if [ -n "$1" ]; then
+    MACHINE_ID="$1"
+elif [ -n "$MACHINE_ID" ]; then
+    MACHINE_ID="$MACHINE_ID"
+else
+    # Auto-detect: try to get a unique identifier from hostname
+    hostname_id=$(hostname | grep -oE '[0-9]+' | head -1)
+    if [ -n "$hostname_id" ]; then
+        MACHINE_ID="wai-${hostname_id}"
+    else
+        MACHINE_ID="wai-1"  # Default fallback
+    fi
+fi
+
+# ============================================================================
 # Configuration
+# ============================================================================
 NO_GENERATION_TIMEOUT=300   # 5 minutes without task activity triggers restart
 CHECK_INTERVAL=60           # How often to check (seconds) - reduced for faster detection
 RESTART_COOLDOWN=120        # Wait time after restart before next check
 HEALTH_REPORT_INTERVAL=300  # How often to print health message (seconds)
-INSTANCE_NAME="wai-1"       # The PM2 instance name to monitor
+INSTANCE_NAME="${MACHINE_ID}" # The PM2 instance name to monitor (derived from MACHINE_ID)
 DESIRED_MODEL_PATTERNS="flux|mistral|gemma|sdxl"  # Desired model keywords (case-insensitive, pipe-separated)
 MAX_MODEL_RESTARTS=3        # Max restarts before entering fallback mode
 FALLBACK_DURATION=1800      # 30 minutes in fallback mode before retrying desired model
@@ -194,7 +219,7 @@ force_restart_instance() {
     sleep $RESTART_COOLDOWN
 }
 
-echo "$(date): Starting w.ai monitor script for $INSTANCE_NAME..."
+echo "$(date): Starting w.ai monitor script for $INSTANCE_NAME (Machine: $MACHINE_ID)..."
 echo "$(date): No generation timeout: ${NO_GENERATION_TIMEOUT}s, Check interval: ${CHECK_INTERVAL}s"
 echo "$(date): Desired models: $DESIRED_MODEL_PATTERNS"
 
